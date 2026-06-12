@@ -203,11 +203,12 @@ export async function adaptOne(job, apiKey) {
     masterId: master.masterId,
   };
   if (!apiKey) {
+    // free mode: the built-in auto-layout engine, no API involved
     return {
       ...base,
       elements: fallbackAdapt(master, size),
       usedFallback: true,
-      error: 'No API key set — used geometric scaling. Add a key and retry for AI adaptation.',
+      error: null,
     };
   }
   try {

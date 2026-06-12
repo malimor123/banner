@@ -8,12 +8,14 @@ function StatusBadge({ status, error, usedFallback }) {
         <span className="h-2 w-2 animate-pulse rounded-full bg-[#7C5CFC]" /> Adapting…
       </span>
     );
-  if (status === 'done' && usedFallback)
+  if (status === 'done' && usedFallback && error)
     return (
-      <span className="text-amber-400" title={error || ''}>
-        ⚠ Fallback scaling{error ? ` — ${error}` : ''}
+      <span className="text-amber-400" title={error}>
+        ⚠ Auto layout — {error}
       </span>
     );
+  if (status === 'done' && usedFallback)
+    return <span className="text-emerald-400">✓ Auto layout</span>;
   if (status === 'done') return <span className="text-emerald-400">✓ AI adapted</span>;
   return <span className="text-red-400">{error || 'Failed'}</span>;
 }
@@ -36,8 +38,9 @@ export default function GenerateStep({
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col overflow-y-auto p-8">
       <h2 className="mb-1 text-lg font-semibold text-[#F0F0F0]">Generate adaptations</h2>
       <p className="mb-5 text-xs text-gray-400">
-        Each size is adapted from its assigned master by Claude AI ({hasKey ? 'API key set' : 'no API key — geometric scaling will be used'}).
-        Calls run in batches of 3 to respect rate limits.
+        {hasKey
+          ? 'Each size is adapted from its assigned master by Claude AI. Calls run in batches of 3 to respect rate limits.'
+          : 'Each size is adapted from its assigned master by the built-in auto-layout engine — free, no API needed. Optional: add an Anthropic API key (lock icon in the header) for AI-powered adaptation.'}
       </p>
 
       <div className="overflow-hidden rounded-xl border border-[#333]">
@@ -79,7 +82,7 @@ export default function GenerateStep({
                     <StatusBadge {...st} />
                   </td>
                   <td className="px-2 py-2.5 text-center">
-                    {st.status === 'done' && st.usedFallback && !generating && (
+                    {st.status === 'done' && st.error && !generating && (
                       <button
                         onClick={() => onRetryOne(s.id)}
                         className="rounded border border-[#333] px-2 py-1 text-[10px] text-gray-300 hover:border-[#7C5CFC]"

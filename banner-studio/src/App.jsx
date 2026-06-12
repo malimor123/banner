@@ -29,7 +29,8 @@ function bestMasterFor(size, masters) {
 export default function App() {
   // --- api key ---
   const [apiKey, setApiKey] = useState(() => localStorage.getItem(API_KEY_STORAGE) || '');
-  const [keyModalOpen, setKeyModalOpen] = useState(() => !localStorage.getItem(API_KEY_STORAGE));
+  // free mode is the default — the key modal opens only when the user asks for AI
+  const [keyModalOpen, setKeyModalOpen] = useState(false);
 
   // --- workflow ---
   const [step, setStep] = useState('upload');

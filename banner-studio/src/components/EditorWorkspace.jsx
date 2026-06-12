@@ -189,9 +189,9 @@ export default function EditorWorkspace({
                 ))}
             </select>
             <div className="min-w-0 flex-1" />
-            {banner.usedFallback && (
-              <span className="truncate text-amber-400" title={banner.error || ''}>
-                ⚠ geometric fallback{banner.error ? ` — ${banner.error}` : ''}
+            {banner.error && (
+              <span className="truncate text-amber-400" title={banner.error}>
+                ⚠ {banner.error}
               </span>
             )}
             {missingFonts.length > 0 && (
@@ -256,7 +256,7 @@ export default function EditorWorkspace({
               title={b.name}
             >
               {b.width}×{b.height}
-              {b.usedFallback && <span className="ml-1 text-amber-300">•</span>}
+              {b.error && <span className="ml-1 text-amber-300">•</span>}
             </button>
           ))}
         </div>
